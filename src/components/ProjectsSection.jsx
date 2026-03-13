@@ -11,7 +11,7 @@ const projects = [
         tag: 'Web App',
         gradient: 'gradient-1',
         icon: '🛒',
-        link: 'https://ecommerce-website-psi-brown.vercel.app/',
+        link: 'https://ecommerce-website-clean.vercel.app/',
         thumbnail: '/feature projects images/ecommerce website.png',
     },
     {
