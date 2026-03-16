@@ -15,14 +15,12 @@ function useTypingAnimation(words, typingSpeed = 100, deletingSpeed = 60, pauseD
         const currentWord = words[wordIndex]
 
         if (!isDeleting) {
-            // Typing
             setDisplayText(currentWord.substring(0, displayText.length + 1))
             if (displayText.length + 1 === currentWord.length) {
                 setTimeout(() => setIsDeleting(true), pauseDuration)
                 return
             }
         } else {
-            // Deleting
             setDisplayText(currentWord.substring(0, displayText.length - 1))
             if (displayText.length - 1 === 0) {
                 setIsDeleting(false)
@@ -47,21 +45,48 @@ export default function HeroSection() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
+            // Make parent visible, animate each child separately
+            gsap.set('.hero-center', { opacity: 1, y: 0 })
+
+            // Unique initial states per element
+            gsap.set('.hero-eyebrow', { opacity: 0, clipPath: 'inset(0 100% 0 0)' })
+            gsap.set('.hero-title', { opacity: 0, y: 70, rotationX: 14, transformPerspective: 1200 })
+            gsap.set('.hero-cta', { opacity: 0, scale: 0.8, y: 20 })
+            gsap.set('.hero-scroll-indicator', { opacity: 0 })
+
             const tl = gsap.timeline({ delay: 1.2 })
 
-            tl.to('.hero-center', {
+            // Eyebrow: clip-path wipe from left (curtain reveal)
+            tl.to('.hero-eyebrow', {
                 opacity: 1,
-                y: 0,
-                duration: 1.2,
+                clipPath: 'inset(0 0% 0 0)',
+                duration: 0.8,
                 ease: 'power3.out',
             })
-                .to('.hero-scroll-indicator', {
-                    opacity: 1,
-                    duration: 1,
-                    ease: 'power2.out',
-                }, '-=0.4')
+            // Title: 3D tilt-up from below
+            .to('.hero-title', {
+                opacity: 1,
+                y: 0,
+                rotationX: 0,
+                duration: 1.1,
+                ease: 'power3.out',
+            }, '-=0.4')
+            // CTA: scale-bounce in
+            .to('.hero-cta', {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.7,
+                ease: 'back.out(1.7)',
+            }, '-=0.5')
+            // Scroll indicator: simple fade
+            .to('.hero-scroll-indicator', {
+                opacity: 1,
+                duration: 1,
+                ease: 'power2.out',
+            }, '-=0.3')
 
-            // Parallax on scroll
+            // Scroll parallax fade-out
             gsap.to('.hero-section', {
                 scrollTrigger: {
                     trigger: '.hero-section',
@@ -96,7 +121,6 @@ export default function HeroSection() {
                 </a>
             </div>
 
-            {/* Decorative divider line */}
             <div className="hero-divider" />
 
             <div className="hero-scroll-indicator">

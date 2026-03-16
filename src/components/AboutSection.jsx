@@ -9,32 +9,42 @@ const HEADLINE = 'Crafting immersive digital worlds with code & creativity'
 export default function AboutSection() {
     const sectionRef = useRef()
     const titleRef = useRef()
-    const contentRef = useRef()
     const imageRef = useRef()
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ paused: true })
 
-            // Title slides in from the left
+            // Title: slide from left (bold entrance)
             tl.fromTo(titleRef.current,
-                { x: -300, opacity: 0 },
-                { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }
+                { opacity: 0, x: -100 },
+                { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }
             )
-            // Content slides in from the left
-            .fromTo(contentRef.current,
-                { x: -300, opacity: 0 },
-                { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-                '-=0.6'
+            // Label: letter-spacing collapse from wide → normal (typographic reveal)
+            .fromTo('.about-label',
+                { opacity: 0, letterSpacing: '12px', y: -10 },
+                { opacity: 1, letterSpacing: '4px', y: 0, duration: 0.6, ease: 'power3.out' },
+                '-=0.5'
             )
-            // Image slides in from the right
+            // Paragraphs: stagger up with blur dissolve
+            .fromTo('.about-description',
+                { opacity: 0, y: 28, filter: 'blur(6px)' },
+                { opacity: 1, y: 0, filter: 'blur(0px)', stagger: 0.22, duration: 0.8, ease: 'power3.out' },
+                '-=0.3'
+            )
+            // Stats: elastic scale-bounce with stagger
+            .fromTo('.stat-item',
+                { opacity: 0, y: 40, scale: 0.75 },
+                { opacity: 1, y: 0, scale: 1, stagger: 0.13, duration: 0.85, ease: 'back.out(2)' },
+                '-=0.5'
+            )
+            // Image: clip-path curtain reveal from bottom-up
             .fromTo(imageRef.current,
-                { x: 300, opacity: 0 },
-                { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-                '-=0.8'
+                { opacity: 0, clipPath: 'inset(100% 0 0 0)' },
+                { opacity: 1, clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'power4.out' },
+                '-=1.4'
             )
 
-            // Restart animation every time the section enters the viewport
             ScrollTrigger.create({
                 trigger: sectionRef.current,
                 start: 'top 85%',
@@ -62,7 +72,7 @@ export default function AboutSection() {
                 </h2>
                 <div className="about-split">
                     {/* Left: Content */}
-                    <div className="about-content" ref={contentRef}>
+                    <div className="about-content">
                         <p className="about-label">About Me</p>
                         <p className="about-description">
                             I'm a full-stack developer with a deep passion for creating memorable

@@ -41,6 +41,15 @@ const projects = [
         link: 'https://tonle-sab.vercel.app/',
         thumbnail: '/feature projects images/tonle sab.png',
     },
+    {
+        title: 'MiniShopKH',
+        description: 'A full-featured Cambodian e-commerce platform with product listings, cart management, and a smooth checkout experience.',
+        tag: 'E-Commerce',
+        gradient: 'gradient-5',
+        icon: '🛍️',
+        link: 'https://minishopkh.lol/',
+        thumbnail: '/feature projects images/minishop kh .png',
+    },
 ]
 
 export default function ProjectsSection() {
@@ -48,59 +57,64 @@ export default function ProjectsSection() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Pop-up animation for header
-            gsap.fromTo('.projects-label', 
-                { opacity: 0, scale: 0.5, y: 30 },
+            // Label: letter-spacing collapse (wide → tight typographic reveal)
+            gsap.fromTo('.projects-label',
+                { opacity: 0, letterSpacing: '18px', y: 20 },
                 {
                     scrollTrigger: {
                         trigger: '.projects-section',
                         start: 'top 80%',
-                        end: 'bottom 20%',
                         toggleActions: 'play reverse play reverse',
                     },
                     opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    duration: 0.7,
-                    ease: 'back.out(1.7)',
-                }
-            )
-
-            gsap.fromTo('.projects-title',
-                { opacity: 0, scale: 0.5, y: 40 },
-                {
-                    scrollTrigger: {
-                        trigger: '.projects-section',
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        toggleActions: 'play reverse play reverse',
-                    },
-                    opacity: 1,
-                    scale: 1,
+                    letterSpacing: '4px',
                     y: 0,
                     duration: 0.8,
-                    ease: 'back.out(1.7)',
-                    delay: 0.15,
+                    ease: 'power3.out',
                 }
             )
 
-            // Pop-up animation for each card
+            // Title: scaleX stretch collapse (horizontal squeeze-in)
+            gsap.fromTo('.projects-title',
+                { opacity: 0, scaleX: 1.25, y: 20, transformOrigin: 'center center' },
+                {
+                    scrollTrigger: {
+                        trigger: '.projects-section',
+                        start: 'top 80%',
+                        toggleActions: 'play reverse play reverse',
+                    },
+                    opacity: 1,
+                    scaleX: 1,
+                    y: 0,
+                    duration: 0.9,
+                    ease: 'elastic.out(1, 0.75)',
+                    delay: 0.18,
+                }
+            )
+
+            // Cards: alternating slide directions — odd from left, even from right
             document.querySelectorAll('.project-card').forEach((card, i) => {
+                const fromLeft = i % 2 === 0
                 gsap.fromTo(card,
-                    { opacity: 0, scale: 0.7, y: 60 },
+                    {
+                        opacity: 0,
+                        x: fromLeft ? -90 : 90,
+                        rotation: fromLeft ? -1.2 : 1.2,
+                        scale: 0.97,
+                    },
                     {
                         scrollTrigger: {
                             trigger: card,
-                            start: 'top 85%',
+                            start: 'top 87%',
                             end: 'bottom 15%',
                             toggleActions: 'play reverse play reverse',
                         },
                         opacity: 1,
+                        x: 0,
+                        rotation: 0,
                         scale: 1,
-                        y: 0,
-                        duration: 0.7,
-                        delay: i * 0.08,
-                        ease: 'back.out(1.4)',
+                        duration: 0.85,
+                        ease: 'power3.out',
                     }
                 )
             })
